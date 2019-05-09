@@ -8,7 +8,7 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/line"
+      redirect: "/official/webgl-animation-keyframes"
     },
     {
       path: "/index",
@@ -17,6 +17,10 @@ export default new Router({
     {
       path: "/line",
       component: () => import("@/views/02-line/index.vue")
+    },
+    {
+      path: "/official/webgl-animation-keyframes",
+      component: () => import("@/views/official-example/webgl-animation-keyframes")
     }
   ]
 });
