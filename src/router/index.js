@@ -8,7 +8,19 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/official/webgl-animation-keyframes"
+      redirect: "/docs/camera/PerspectiveCamera"
+    },
+    {
+      path: "/init",
+      component: () => import("@/views/init/index.vue")
+    },
+    {
+      path: '/demo/the-aviator',
+      component: () => import("@/views/demo/the-aviator/index.vue")
+    },
+    {
+      path: '/demo/the-aviator-one',
+      component: () => import("@/views/demo/the-aviator-one/index.vue")
     },
     {
       path: "/index",
@@ -21,6 +33,20 @@ export default new Router({
     {
       path: "/official/webgl-animation-keyframes",
       component: () => import("@/views/official-example/webgl-animation-keyframes")
+    },
+    {
+      path: "/docs",
+      component: () => import("@/views/docs"),
+      children: [
+        {
+          path: '/docs/camera/PerspectiveCamera',
+          component: () => import("@/views/docs/camera/PerspectiveCamera")
+        },
+        {
+          path: '/docs/camera/OrthographicCamera',
+          component: () => import("@/views/docs/camera/OrthographicCamera")
+        }
+      ]
     }
   ]
 });

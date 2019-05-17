@@ -13,9 +13,8 @@ import {
   Scene,
   Camera,
   WebGLRenderer,
-  PerspectiveCamera,
+  OrthographicCamera,
   Object3D,
-  Clock, // Object for keeping track of time. This uses performance.now() if it is available, otherwise it reverts to the less accurate Date.now(). 用来记录时间的物体。如果可用，则使用performance.now()，否则将返回到不太精确的Date.now()。
   Vector3,
   GridHelper,
   Geometry,
@@ -25,7 +24,10 @@ import {
   LineBasicMaterial,
   Line,
   PointLight, // https://threejs.docschina.org/#api/lights/PointLight
-  Color
+  Color,
+  Mesh,
+  CubeGeometry,
+  MeshBasicMaterial
 } from 'three'
 import { OrbitControls } from '@/common/controls/OrbitControls'
 import { getSize, getCenter } from '@/common/util'
@@ -100,7 +102,7 @@ export default {
     cameraPosition: {
         type: Object,
         default() {
-            return { x: 2600, y: 2600, z: 2600 }
+            return { x: 0, y: 0, z: 5 }
         }
     },
     cameraRotation: {
@@ -122,7 +124,6 @@ export default {
   },
   data () {
     return {
-      clock: new Clock(),
       controls: null,
       allLights: [],
       size: {
@@ -133,7 +134,7 @@ export default {
       wrapper: new Object3D(), // https://threejs.docschina.org/#api/core/Object3D
       suportWebGL,
       renderer: null,
-      camera: new PerspectiveCamera( 45, 1, 0.01, 100000 ),
+      camera: new OrthographicCamera(-2, 2, 1.5, -1.5, 1, 10),
       scene: new Scene()
     }
   },
@@ -155,6 +156,7 @@ export default {
 
     this.renderer.gammaOutput = true
     this.renderer.gammaFactor = 2.2
+    this.renderer.setClearColor(0x000000)
     this.adjust()
     this.scene.add( this.wrapper )
     this.load()
@@ -163,7 +165,13 @@ export default {
   },
   methods: {
     adjust () {
-
+      var cube = new Mesh(new CubeGeometry(1, 1, 1),
+        new MeshBasicMaterial({
+          color: 0xff0000,
+          wireframe: true
+        })
+      )
+      this.scene.add(cube)
     },
     load() {
         if ( !this.src ) return;
