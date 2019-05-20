@@ -24,13 +24,28 @@ export default {
   data () {
     return {
       panelArr: [{
-        title: '摄像机',
+        title: '摄像机(Cameras)',
         list: [{
           title: 'PerspectiveCamera',
           link: '/docs/camera/PerspectiveCamera'
         }, {
           title: 'OrthographicCamera',
           link: '/docs/camera/OrthographicCamera'
+        }]
+      }, {
+        title: '几何体(Geometries)',
+        list: [{
+          title: 'PlaneGeometry',
+          link: '/docs/Geometries/PlaneGeometry'
+        }, {
+          title: 'PlaneGeometry',
+          link: '/docs/Geometries/PlaneGeometry'
+        }]
+      }, {
+        title: '灯光 / 阴影(LightShadow)',
+        list: [{
+          title: 'DirectionalLightShadow',
+          link: '/docs/LightShadow/DirectionalLightShadow'
         }]
       }]
     }

@@ -45,6 +45,14 @@ export default new Router({
         {
           path: '/docs/camera/OrthographicCamera',
           component: () => import("@/views/docs/camera/OrthographicCamera")
+        },
+        {
+          path: '/docs/Geometries/PlaneGeometry',
+          component: () => import("@/views/docs/Geometries/PlaneGeometry")
+        },
+        {
+          path: '/docs/LightShadow/DirectionalLightShadow',
+          component: () => import("@/views/docs/LightShadow/DirectionalLightShadow")
         }
       ]
     }
