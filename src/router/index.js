@@ -8,7 +8,7 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/docs/camera/PerspectiveCamera"
+      redirect: "/docs/Object/Mesh/demo01"
     },
     {
       path: "/init",
@@ -39,20 +39,80 @@ export default new Router({
       component: () => import("@/views/docs"),
       children: [
         {
-          path: '/docs/camera/PerspectiveCamera',
-          component: () => import("@/views/docs/camera/PerspectiveCamera")
+          path: '/docs/Camera/PerspectiveCamera',
+          component: () => import("@/views/docs/Camera/PerspectiveCamera")
         },
         {
-          path: '/docs/camera/OrthographicCamera',
-          component: () => import("@/views/docs/camera/OrthographicCamera")
+          path: '/docs/Camera/OrthographicCamera',
+          component: () => import("@/views/docs/Camera/OrthographicCamera")
         },
         {
           path: '/docs/Geometries/PlaneGeometry',
           component: () => import("@/views/docs/Geometries/PlaneGeometry")
         },
         {
+          path: '/docs/Object/Line',
+          component: () => import("@/views/docs/Object/Line"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/Object/Line/demo01")
+          }]
+        },
+        {
+          path: '/docs/Object/Mesh',
+          component: () => import("@/views/docs/Object/Mesh"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/Object/Mesh/demo01")
+          }]
+        },
+        {
           path: '/docs/LightShadow/DirectionalLightShadow',
-          component: () => import("@/views/docs/LightShadow/DirectionalLightShadow")
+          component: () => import("@/views/docs/LightShadow/DirectionalLightShadow"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/LightShadow/DirectionalLightShadow/demo01")
+          }]
+        },{
+          path: '/docs/LightShadow/SpotLightShadow',
+          component: () => import("@/views/docs/LightShadow/SpotLightShadow"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/LightShadow/SpotLightShadow/demo01")
+          }]
+        },
+        {
+          path: '/docs/Loaders/FBXLoader',
+          component: () => import("@/views/docs/Loaders/FBXLoader"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/Loaders/FBXLoader/demo01")
+          }, {
+            path: 'demo02',
+            component: () => import("@/views/docs/Loaders/FBXLoader/demo02")
+          }, {
+            path: 'demo03',
+            component: () => import("@/views/docs/Loaders/FBXLoader/demo03")
+          }]
+        },
+        {
+          path: '/docs/Light/AmbientLight',
+          component: () => import("@/views/docs/Light/AmbientLight"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/Light/AmbientLight/demo01")
+          }]
+        },
+        {
+          path: '/docs/Light/DirectionalLight',
+          component: () => import("@/views/docs/Light/DirectionalLight"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/Light/DirectionalLight/demo01")
+          }, {
+            path: 'demo02',
+            component: () => import("@/views/docs/Light/DirectionalLight/demo02")
+          }]
         }
       ]
     }

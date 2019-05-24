@@ -1,8 +1,14 @@
 <template>
 <div style="width: 100%; height: 100%; margin: 0; border: 0; padding: 0;">
   <div style="display: flex;" class="link-list">
-    <router-link to="/docs/LightShadow/DirectionalLightShadow/demo01">
+    <router-link to="/docs/Loaders/FBXLoader/demo01">
       <div style="padding: 20px 10px 10px 20px; color: #2194ce; font-size:14px">demo01</div>
+    </router-link>
+    <router-link to="/docs/Loaders/FBXLoader/demo02">
+      <div style="padding: 20px 10px 10px 20px; color: #2194ce; font-size:14px">demo02</div>
+    </router-link>
+    <router-link to="/docs/Loaders/FBXLoader/demo03">
+      <div style="padding: 20px 10px 10px 20px; color: #2194ce; font-size:14px">demo03</div>
     </router-link>
   </div>
   <router-view/>

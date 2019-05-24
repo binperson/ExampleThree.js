@@ -27,10 +27,10 @@ export default {
         title: '摄像机(Cameras)',
         list: [{
           title: 'PerspectiveCamera',
-          link: '/docs/camera/PerspectiveCamera'
+          link: '/docs/Camera/PerspectiveCamera'
         }, {
           title: 'OrthographicCamera',
-          link: '/docs/camera/OrthographicCamera'
+          link: '/docs/Camera/OrthographicCamera'
         }]
       }, {
         title: '几何体(Geometries)',
@@ -42,10 +42,34 @@ export default {
           link: '/docs/Geometries/PlaneGeometry'
         }]
       }, {
+        title: '灯光(Light)',
+        list: [{
+          title: 'AmbientLight',
+          link: '/docs/Light/AmbientLight/demo01'
+        }, {
+          title: 'DirectionalLight',
+          link: '/docs/Light/DirectionalLight/demo01'
+        }]
+      }, {
         title: '灯光 / 阴影(LightShadow)',
         list: [{
           title: 'DirectionalLightShadow',
           link: '/docs/LightShadow/DirectionalLightShadow'
+        }, {
+          title: 'SpotLightShadow',
+          link: '/docs/LightShadow/SpotLightShadow'
+        }]
+      }, {
+        title: '加载器(Loaders)',
+        list: [{
+          title: 'FBXLoader',
+          link: '/docs/Loaders/FBXLoader'
+        }]
+      }, {
+        title: '物体(Object)',
+        list: [{
+          title: 'Line',
+          link: '/docs/Object/Line/demo01'
         }]
       }]
     }
