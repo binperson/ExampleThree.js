@@ -1,5 +1,7 @@
 <template>
 <div style="width: 100%; height: 100%; margin: 0; border: 0; padding: 0;">
+  <p style="line-height: 28px; padding: 0 20px">
+平面几何体, 一个用于生成平面几何体的类。</p>
   <canvas v-if="suportWebGL" ref="canvas" style="width: 100%; height: 100%;"></canvas>
   <div v-else>
     <slot>

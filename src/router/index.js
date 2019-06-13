@@ -8,7 +8,11 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/docs/Object/Mesh/demo01"
+      redirect: "/index"
+    },
+    {
+      path: "/index",
+      component: () => import("@/views/index/index.vue")
     },
     {
       path: "/init",
@@ -112,6 +116,20 @@ export default new Router({
           }, {
             path: 'demo02',
             component: () => import("@/views/docs/Light/DirectionalLight/demo02")
+          }]
+        },
+        {
+          path: '/docs/Textures/Texture',
+          component: () => import("@/views/docs/Textures/Texture"),
+          children: [{
+            path: 'demo01',
+            component: () => import("@/views/docs/Textures/Texture/demo01")
+          }, {
+            path: 'demo02',
+            component: () => import("@/views/docs/Textures/Texture/demo02")
+          }, {
+            path: 'demo03',
+            component: () => import("@/views/docs/Textures/Texture/demo03")
           }]
         }
       ]

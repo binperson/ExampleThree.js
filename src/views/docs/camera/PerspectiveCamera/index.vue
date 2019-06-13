@@ -1,5 +1,7 @@
 <template>
 <div style="width: 100%; height: 100%; margin: 0; border: 0; padding: 0;">
+  <p style="line-height: 28px; padding: 0 20px">
+透视投影, 用来模拟人眼所看到的景象, 它是3D场景的渲染中使用得最普遍的投影模式。</p>
   <canvas v-if="suportWebGL" ref="canvas" style="width: 100%; height: 100%;"></canvas>
   <div v-else>
     <slot>

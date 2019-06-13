@@ -1,6 +1,6 @@
 <template>
 <div style="width: 100%; height: 100%; margin: 0; border: 0; padding: 0;">
-  <p style="line-height: 28px; padding: 0 20px">环境光会均匀的照亮场景中的所有物体, 环境光不能用来投射阴影，因为它没有方向。</p>
+  <p style="line-height: 28px; padding: 0 20px">平行光是沿着特定方向发射的光。这种光的表现像是无限远,从它发出的光线都是平行的。常常用平行光来模拟太阳光 的效果; 太阳足够远，因此我们可以认为太阳的位置是无限远，所以我们认为从太阳发出的光线也都是平行的。</p>
   <canvas v-if="suportWebGL" ref="canvas" style="width: 100%; height: 100%;"></canvas>
   <div v-else>
     <slot>
@@ -29,7 +29,11 @@ import {
   Color,
   Mesh,
   CubeGeometry,
-  MeshLambertMaterial
+  MeshLambertMaterial,
+  ImageUtils,
+  MeshFaceMaterial,
+  MeshPhongMaterial,
+  Vector2
 } from 'three'
 import { OrbitControls } from '@/common/controls/OrbitControls'
 import { getSize, getCenter } from '@/common/util'
@@ -58,10 +62,6 @@ export default {
         type: Array,
         default() {
             return [
-                {
-                  type: 'AmbientLight',
-                  color: 0xcccccc
-                }
             ]
         }
     },
@@ -158,23 +158,55 @@ export default {
     this.scene.add( this.wrapper )
     this.load()
     this.update()
+
+    this.addjustLight()
     this.animate()
   },
   methods: {
     addjustLight () {
-
+      var light = new DirectionalLight();
+      light.position.set(200, 500, 300);
+      this.scene.add(light);
     },
     adjust () {
-      var greenCube = new Mesh(new CubeGeometry(200, 200, 200),
-      new MeshLambertMaterial({color: 0xff0000}));
-      greenCube.position.x = 200;
-      greenCube.position.y = 200;
-      this.scene.add(greenCube);
+      var material = new MeshPhongMaterial({ map: ImageUtils.loadTexture('/static/textures/img/texture-atlas.jpg') })
 
-      var whiteCube = new Mesh(new CubeGeometry(200, 200, 200),
-      new MeshLambertMaterial({color: 0x00ff00}));
-      whiteCube.position.x = -200;
-      this.scene.add(whiteCube);
+      var meshFaceMaterial = new MeshFaceMaterial( material );
+
+      var bricks = [new Vector2(0, .666), new Vector2(.5, .666), new Vector2(.5, 1), new Vector2(0, 1)];
+      var clouds = [new Vector2(.5, .666), new Vector2(1, .666), new Vector2(1, 1), new Vector2(.5, 1)];
+      var crate = [new Vector2(0, .333), new Vector2(.5, .333), new Vector2(.5, .666), new Vector2(0, .666)];
+      var stone = [new Vector2(.5, .333), new Vector2(1, .333), new Vector2(1, .666), new Vector2(.5, .666)];
+      var water = [new Vector2(0, 0), new Vector2(.5, 0), new Vector2(.5, .333), new Vector2(0, .333)];
+      var wood = [new Vector2(.5, 0), new Vector2(1, 0), new Vector2(1, .333), new Vector2(.5, .333)];
+      var geometry = new CubeGeometry(200, 200, 200)
+      geometry.faceVertexUvs[0] = [];
+      geometry.faceVertexUvs[0][0] = [ bricks[0], bricks[1], bricks[3] ];
+      geometry.faceVertexUvs[0][1] = [ bricks[1], bricks[2], bricks[3] ];
+
+      geometry.faceVertexUvs[0][2] = [ clouds[0], clouds[1], clouds[3] ];
+      geometry.faceVertexUvs[0][3] = [ clouds[1], clouds[2], clouds[3] ];
+
+      geometry.faceVertexUvs[0][4] = [ crate[0], crate[1], crate[3] ];
+      geometry.faceVertexUvs[0][5] = [ crate[1], crate[2], crate[3] ];
+
+      geometry.faceVertexUvs[0][6] = [ stone[0], stone[1], stone[3] ];
+      geometry.faceVertexUvs[0][7] = [ stone[1], stone[2], stone[3] ];
+
+      geometry.faceVertexUvs[0][8] = [ water[0], water[1], water[3] ];
+      geometry.faceVertexUvs[0][9] = [ water[1], water[2], water[3] ];
+
+      geometry.faceVertexUvs[0][10] = [ wood[0], wood[1], wood[3] ];
+      geometry.faceVertexUvs[0][11] = [ wood[1], wood[2], wood[3] ];
+      var rightCube = new Mesh(geometry,
+                        meshFaceMaterial);
+      rightCube.position.x = 200;
+      this.scene.add(rightCube);
+
+      var leftCube = new Mesh(new CubeGeometry(200, 200, 200),
+                        new MeshLambertMaterial({color: 0x00ff00}));
+      leftCube.position.x = -200;
+      this.scene.add(leftCube);
     },
     load() {
         if ( !this.src ) return;

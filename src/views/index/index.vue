@@ -1,6 +1,5 @@
 <template>
 <div style="width: 100%; height: 100%; margin: 0; border: 0; padding: 0;">
-  <p style="line-height: 28px; padding: 0 20px">环境光会均匀的照亮场景中的所有物体, 环境光不能用来投射阴影，因为它没有方向。</p>
   <canvas v-if="suportWebGL" ref="canvas" style="width: 100%; height: 100%;"></canvas>
   <div v-else>
     <slot>
@@ -27,9 +26,11 @@ import {
   Line,
   PointLight, // https://threejs.docschina.org/#api/lights/PointLight
   Color,
-  Mesh,
+  ImageUtils,
   CubeGeometry,
-  MeshLambertMaterial
+  Mesh,
+  MeshFaceMaterial,
+  MeshBasicMaterial
 } from 'three'
 import { OrbitControls } from '@/common/controls/OrbitControls'
 import { getSize, getCenter } from '@/common/util'
@@ -59,8 +60,13 @@ export default {
         default() {
             return [
                 {
+                    type: 'PointLight',
+                    color: 0xffffff,
+                    intensity: 1
+                },
+                {
                   type: 'AmbientLight',
-                  color: 0xcccccc
+                  color: 0x404040
                 }
             ]
         }
@@ -99,7 +105,7 @@ export default {
     cameraPosition: {
         type: Object,
         default() {
-            return { x: 1000, y: 1000, z: 1000 }
+            return { x: 0, y: 40, z: -85 }
         }
     },
     cameraRotation: {
@@ -132,7 +138,7 @@ export default {
       wrapper: new Object3D(), // https://threejs.docschina.org/#api/core/Object3D
       suportWebGL,
       renderer: null,
-      camera: new PerspectiveCamera( 45, 1, 0.01, 100000 ),
+      camera: new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.01, 100000 ),
       scene: new Scene()
     }
   },
@@ -161,25 +167,45 @@ export default {
     this.animate()
   },
   methods: {
-    addjustLight () {
-
-    },
     adjust () {
-      var greenCube = new Mesh(new CubeGeometry(200, 200, 200),
-      new MeshLambertMaterial({color: 0xff0000}));
-      greenCube.position.x = 200;
-      greenCube.position.y = 200;
-      this.scene.add(greenCube);
 
-      var whiteCube = new Mesh(new CubeGeometry(200, 200, 200),
-      new MeshLambertMaterial({color: 0x00ff00}));
-      whiteCube.position.x = -200;
-      this.scene.add(whiteCube);
+      var cameraTarget = new Object3D()
+      cameraTarget.position.y = 10
+      cameraTarget.position.z = 6000
+      this.camera.target = cameraTarget
+
+      var skyMaterials, sky2Materials
+      var path = "/static/textures/sky/overcast1_"
+      var format = '.jpg'
+      var urls = [path + 'left' + format, path + 'right' + format, path + 'up' + format, path + 'down' + format, path + 'front' + format, path + 'back' + format];
+
+      var overcastTextures = [];
+      console.log(urls[ 0 ], ImageUtils.loadTexture( urls[ 0 ] ))
+      overcastTextures.push(ImageUtils.loadTexture( urls[ 0 ] ))
+      overcastTextures.push(ImageUtils.loadTexture( urls[ 1 ] ))
+      overcastTextures.push(ImageUtils.loadTexture( urls[ 2 ] ))
+      overcastTextures.push(ImageUtils.loadTexture( urls[ 2 ] ))
+      overcastTextures.push(ImageUtils.loadTexture( urls[ 4 ] ))
+      overcastTextures.push(ImageUtils.loadTexture( urls[ 5 ] ))
+
+      skyMaterials = [];
+      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 0 ]  } ) )
+      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 1 ] } ) )
+      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 2 ] } ) )
+      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 3 ] } ) )
+      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 4 ] } ) )
+      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 5 ] } ) )
+
+      var meshFaceMaterial = new MeshFaceMaterial( skyMaterials );
+
+      var skyMesh = new Mesh( new CubeGeometry(200, 200, 200), meshFaceMaterial )
+      console.log(skyMesh)
+      this.scene.add( skyMesh )
     },
     load() {
         if ( !this.src ) return;
         if ( this.object ) {
-            this.wrapper.remove( this.object );
+            this.wrappetr.remove( this.object );
         }
         this.loader.load( this.src, ( ...args ) => {
             const object = this.getObject( ...args )

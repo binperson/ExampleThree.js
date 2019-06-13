@@ -1,5 +1,7 @@
 <template>
 <div style="width: 100%; height: 100%; margin: 0; border: 0; padding: 0;">
+  <p style="line-height: 28px; padding: 0 20px">
+正交投影, 无论物体距离相机距离远或者近，在最终渲染的图片中物体的大小都保持不变。 这对于渲染2D场景或者UI元素是非常有用的。 </p>
   <canvas v-if="suportWebGL" ref="canvas" style="width: 100%; height: 100%;"></canvas>
   <div v-else>
     <slot>

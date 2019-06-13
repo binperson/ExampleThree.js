@@ -1,5 +1,5 @@
 <script type='text/ecmascript-6'>
-import ThreeMixin from '@/components/ThreeMixin/index'
+import ThreeMixin from '@/components/three-mixin/index'
 import { GLTFLoader } from '@/common/loaders/GLTFLoader'
 import { DRACOLoader } from '@/common/loaders/DRACOLoader'
 import {
@@ -101,7 +101,7 @@ export default {
         this.addObject( model )
 				this.mixer = new AnimationMixer( model );
         this.mixer.clipAction( gltf.animations[ 0 ] ).play(); // 为传入的 clip 返回一个 AnimationAction，可以选择性地使用一个不同于该 mixer 默认的根对象的根对象。 第一个参数可以是一个 AnimationClip 对象或一个 AnimationClip 的名称。
-        console.log('this.mixer1', this.mixer) // https://threejs.docschina.org/#api/animation/AnimationAction 
+        console.log('this.mixer1', this.mixer) // https://threejs.docschina.org/#api/animation/AnimationAction
 			}, undefined, function ( e ) {
 				console.error( e );
 			} )

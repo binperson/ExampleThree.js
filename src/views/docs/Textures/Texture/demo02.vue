@@ -1,6 +1,6 @@
 <template>
 <div style="width: 100%; height: 100%; margin: 0; border: 0; padding: 0;">
-  <p style="line-height: 28px; padding: 0 20px">环境光会均匀的照亮场景中的所有物体, 环境光不能用来投射阴影，因为它没有方向。</p>
+  <p style="line-height: 28px; padding: 0 20px">平行光是沿着特定方向发射的光。这种光的表现像是无限远,从它发出的光线都是平行的。常常用平行光来模拟太阳光 的效果; 太阳足够远，因此我们可以认为太阳的位置是无限远，所以我们认为从太阳发出的光线也都是平行的。</p>
   <canvas v-if="suportWebGL" ref="canvas" style="width: 100%; height: 100%;"></canvas>
   <div v-else>
     <slot>
@@ -29,7 +29,10 @@ import {
   Color,
   Mesh,
   CubeGeometry,
-  MeshLambertMaterial
+  MeshLambertMaterial,
+  ImageUtils,
+  MeshFaceMaterial,
+  MeshPhongMaterial
 } from 'three'
 import { OrbitControls } from '@/common/controls/OrbitControls'
 import { getSize, getCenter } from '@/common/util'
@@ -58,10 +61,6 @@ export default {
         type: Array,
         default() {
             return [
-                {
-                  type: 'AmbientLight',
-                  color: 0xcccccc
-                }
             ]
         }
     },
@@ -158,23 +157,43 @@ export default {
     this.scene.add( this.wrapper )
     this.load()
     this.update()
+
+    this.addjustLight()
     this.animate()
   },
   methods: {
     addjustLight () {
-
+      var light = new DirectionalLight();
+      light.position.set(200, 500, 300);
+      this.scene.add(light);
     },
     adjust () {
-      var greenCube = new Mesh(new CubeGeometry(200, 200, 200),
-      new MeshLambertMaterial({color: 0xff0000}));
-      greenCube.position.x = 200;
-      greenCube.position.y = 200;
-      this.scene.add(greenCube);
+      var material1 = new MeshPhongMaterial( {
+        map: ImageUtils.loadTexture('/static/textures/img/crate.jpg') } );
+      var material2 = new MeshPhongMaterial( {
+        map: ImageUtils.loadTexture('/static/textures/img/bricks.jpg') } );
+      var material3 = new MeshPhongMaterial( {
+        map: ImageUtils.loadTexture('/static/textures/img/clouds.jpg') } );
+      var material4 = new MeshPhongMaterial( {
+        map: ImageUtils.loadTexture('/static/textures/img/stone-wall.jpg') } );
+      var material5 = new MeshPhongMaterial( {
+        map: ImageUtils.loadTexture('/static/textures/img/water.jpg') } );
+      var material6 = new MeshPhongMaterial( {
+        map: ImageUtils.loadTexture('/static/textures/img/wood-floor.jpg') } );
 
-      var whiteCube = new Mesh(new CubeGeometry(200, 200, 200),
-      new MeshLambertMaterial({color: 0x00ff00}));
-      whiteCube.position.x = -200;
-      this.scene.add(whiteCube);
+      var materials = [material1, material2, material3, material4, material5, material6];
+
+      var meshFaceMaterial = new MeshFaceMaterial( materials );
+
+      var rightCube = new Mesh(new CubeGeometry(200, 200, 200),
+                        meshFaceMaterial);
+      rightCube.position.x = 200;
+      this.scene.add(rightCube);
+
+      var leftCube = new Mesh(new CubeGeometry(200, 200, 200),
+                        new MeshLambertMaterial({color: 0x00ff00}));
+      leftCube.position.x = -200;
+      this.scene.add(leftCube);
     },
     load() {
         if ( !this.src ) return;

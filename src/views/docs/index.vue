@@ -37,9 +37,6 @@ export default {
         list: [{
           title: 'PlaneGeometry',
           link: '/docs/Geometries/PlaneGeometry'
-        }, {
-          title: 'PlaneGeometry',
-          link: '/docs/Geometries/PlaneGeometry'
         }]
       }, {
         title: '灯光(Light)',
@@ -54,22 +51,31 @@ export default {
         title: '灯光 / 阴影(LightShadow)',
         list: [{
           title: 'DirectionalLightShadow',
-          link: '/docs/LightShadow/DirectionalLightShadow'
+          link: '/docs/LightShadow/DirectionalLightShadow/demo01'
         }, {
           title: 'SpotLightShadow',
-          link: '/docs/LightShadow/SpotLightShadow'
+          link: '/docs/LightShadow/SpotLightShadow/demo01'
         }]
       }, {
         title: '加载器(Loaders)',
         list: [{
           title: 'FBXLoader',
-          link: '/docs/Loaders/FBXLoader'
+          link: '/docs/Loaders/FBXLoader/demo01'
         }]
       }, {
         title: '物体(Object)',
         list: [{
           title: 'Line',
           link: '/docs/Object/Line/demo01'
+        }, {
+          title: 'Mesh',
+          link: '/docs/Object/Mesh/demo01'
+        }]
+      }, {
+        title: '纹理(Textures)',
+        list: [{
+          title: 'Texture',
+          link: '/docs/Textures/Texture/demo01'
         }]
       }]
     }
