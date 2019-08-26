@@ -17,10 +17,12 @@ import {
   Object3D,
   Clock, // Object for keeping track of time. This uses performance.now() if it is available, otherwise it reverts to the less accurate Date.now(). 用来记录时间的物体。如果可用，则使用performance.now()，否则将返回到不太精确的Date.now()。
   Vector3,
+  SphereBufferGeometry,
   GridHelper,
   Geometry,
   AmbientLight,
   DirectionalLight,
+  SpotLight,
   HemisphereLight,
   LineBasicMaterial,
   Line,
@@ -30,7 +32,9 @@ import {
   CubeGeometry,
   Mesh,
   MeshFaceMaterial,
-  MeshBasicMaterial
+  MeshBasicMaterial,
+  PlaneBufferGeometry,
+  MeshPhongMaterial
 } from 'three'
 import { OrbitControls } from '@/common/controls/OrbitControls'
 import { getSize, getCenter } from '@/common/util'
@@ -59,15 +63,15 @@ export default {
         type: Array,
         default() {
             return [
-                {
-                    type: 'PointLight',
-                    color: 0xffffff,
-                    intensity: 1
-                },
-                {
-                  type: 'AmbientLight',
-                  color: 0x404040
-                }
+                // {
+                //     type: 'PointLight',
+                //     color: 0xffffff,
+                //     intensity: 1
+                // },
+                // {
+                //   type: 'AmbientLight',
+                //   color: 0x404040
+                // }
             ]
         }
     },
@@ -139,7 +143,8 @@ export default {
       suportWebGL,
       renderer: null,
       camera: new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.01, 100000 ),
-      scene: new Scene()
+      scene: new Scene(),
+      otherlights: []
     }
   },
   mounted() {
@@ -168,39 +173,69 @@ export default {
   },
   methods: {
     adjust () {
+      var size = 100;
+      var geometry = new PlaneBufferGeometry( size, size );
+      var material = new MeshPhongMaterial( { color: 0x222222, specular: 0x222222, shininess: 75 } );
+      var transparentMaterial = new MeshPhongMaterial( { color: 0x222222, emissive: 0x88888888, specular: 0x222222, shininess: 75, opacity: 0.3, transparent: true } );
 
-      var cameraTarget = new Object3D()
-      cameraTarget.position.y = 10
-      cameraTarget.position.z = 6000
-      this.camera.target = cameraTarget
+      var room = new Object3D();
+      room.position.y = size / 2 - 30;
 
-      var skyMaterials, sky2Materials
-      var path = "/static/textures/sky/overcast1_"
-      var format = '.jpg'
-      var urls = [path + 'left' + format, path + 'right' + format, path + 'up' + format, path + 'down' + format, path + 'front' + format, path + 'back' + format];
+      // top
+      var mesh = new Mesh( geometry, material );
+      mesh.rotation.x = Math.PI / 2;
+      mesh.position.y = size / 2;
+      room.add( mesh );
 
-      var overcastTextures = [];
-      console.log(urls[ 0 ], ImageUtils.loadTexture( urls[ 0 ] ))
-      overcastTextures.push(ImageUtils.loadTexture( urls[ 0 ] ))
-      overcastTextures.push(ImageUtils.loadTexture( urls[ 1 ] ))
-      overcastTextures.push(ImageUtils.loadTexture( urls[ 2 ] ))
-      overcastTextures.push(ImageUtils.loadTexture( urls[ 2 ] ))
-      overcastTextures.push(ImageUtils.loadTexture( urls[ 4 ] ))
-      overcastTextures.push(ImageUtils.loadTexture( urls[ 5 ] ))
+      // bottom
+      mesh = new Mesh( geometry, material );
+      mesh.rotation.x = - Math.PI / 2;
+      mesh.position.y = - size / 2;
+      room.add( mesh );
 
-      skyMaterials = [];
-      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 0 ]  } ) )
-      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 1 ] } ) )
-      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 2 ] } ) )
-      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 3 ] } ) )
-      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 4 ] } ) )
-      skyMaterials.push( new MeshBasicMaterial( { map: overcastTextures[ 5 ] } ) )
+      // left
+      mesh = new Mesh( geometry, material );
+      mesh.position.x = - size / 2;
+      mesh.rotation.y = Math.PI / 2;
+      room.add( mesh );
 
-      var meshFaceMaterial = new MeshFaceMaterial( skyMaterials );
+      // right
+      mesh = new Mesh( geometry, material );
+      mesh.position.x = size / 2;
+      mesh.rotation.y = - Math.PI / 2;
+      room.add( mesh );
 
-      var skyMesh = new Mesh( new CubeGeometry(200, 200, 200), meshFaceMaterial )
-      console.log(skyMesh)
-      this.scene.add( skyMesh )
+      // back
+      mesh = new Mesh( geometry, material );
+      mesh.position.z = - size / 2;
+      room.add( mesh );
+
+      this.scene.add( room )
+
+      var distance = 20;
+
+      var c = new Vector3();
+      var geometry = new SphereBufferGeometry( 1, 1, 1 );
+      var numLights = 40
+      for ( var i = 0; i < numLights; i ++ ) {
+
+        var light = new PointLight( 0xffffff, 2.0, distance );
+        c.set( window.Math.random(), window.Math.random(), window.Math.random() ).normalize();
+        light.color.setRGB( c.x, c.y, c.z );
+        this.scene.add( light );
+        this.otherlights.push( light );
+
+        var material = new MeshBasicMaterial( { color: light.color } );
+        var emitter = new Mesh( geometry, material );
+        light.add( emitter );
+      }
+      var directionalLight = new DirectionalLight( 0x101010 );
+      directionalLight.position.set( - 1, 1, 1 ).normalize();
+      this.scene.add( directionalLight );
+
+      var spotLight = new SpotLight( 0x404040 );
+      spotLight.position.set( 0, 50, 0 );
+      this.scene.add( spotLight );
     },
     load() {
         if ( !this.src ) return;
@@ -263,7 +298,7 @@ export default {
         const renderer = this.renderer;
         renderer.setSize( this.size.width, this.size.height );
         renderer.setPixelRatio( window.devicePixelRatio || 1 );
-        renderer.setClearColor( new Color( this.backgroundColor ).getHex() );
+        // renderer.setClearColor( new Color( this.backgroundColor ).getHex() );
         renderer.setClearAlpha( this.backgroundAlpha );
     },
     updateLights() {
@@ -333,7 +368,20 @@ export default {
         this.render();
     },
     render() {
-        this.renderer.render( this.scene, this.camera )
+      var delta = this.clock.getDelta();
+      var time = Date.now() * 0.0005;
+
+
+      for ( var i = 0, il = this.otherlights.length; i < il; i ++ ) {
+
+        var light = this.otherlights[ i ];
+        var x = Math.sin( time + i * 7.0 ) * 45;
+        var y = Math.cos( time + i * 5.0 ) * 45 + 20;
+        var z = Math.cos( time + i * 3.0 ) * 45;
+        light.position.set( x, y, z );
+
+      }
+      this.renderer.render( this.scene, this.camera )
     },
     drawAxes (scene) {
       if (this.assist === false) {

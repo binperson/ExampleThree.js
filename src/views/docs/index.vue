@@ -5,8 +5,8 @@
       <div v-for="(items, index) in panelArr" :key="index">
         <h3>{{items.title}}</h3>
         <ul>
-          <li v-for="(item, i) in items.list" :key="i">
-            <router-link :to="item.link">
+          <li v-for="(item, i) in items.children" :key="i">
+            <router-link :to="item.path">
               {{item.title}}
             </router-link>
           </li>
@@ -20,64 +20,11 @@
 </div>
 </template>
 <script type='text/ecmascript-6'>
+import panelArr from './index.js'
 export default {
   data () {
     return {
-      panelArr: [{
-        title: '摄像机(Cameras)',
-        list: [{
-          title: 'PerspectiveCamera',
-          link: '/docs/Camera/PerspectiveCamera'
-        }, {
-          title: 'OrthographicCamera',
-          link: '/docs/Camera/OrthographicCamera'
-        }]
-      }, {
-        title: '几何体(Geometries)',
-        list: [{
-          title: 'PlaneGeometry',
-          link: '/docs/Geometries/PlaneGeometry'
-        }]
-      }, {
-        title: '灯光(Light)',
-        list: [{
-          title: 'AmbientLight',
-          link: '/docs/Light/AmbientLight/demo01'
-        }, {
-          title: 'DirectionalLight',
-          link: '/docs/Light/DirectionalLight/demo01'
-        }]
-      }, {
-        title: '灯光 / 阴影(LightShadow)',
-        list: [{
-          title: 'DirectionalLightShadow',
-          link: '/docs/LightShadow/DirectionalLightShadow/demo01'
-        }, {
-          title: 'SpotLightShadow',
-          link: '/docs/LightShadow/SpotLightShadow/demo01'
-        }]
-      }, {
-        title: '加载器(Loaders)',
-        list: [{
-          title: 'FBXLoader',
-          link: '/docs/Loaders/FBXLoader/demo01'
-        }]
-      }, {
-        title: '物体(Object)',
-        list: [{
-          title: 'Line',
-          link: '/docs/Object/Line/demo01'
-        }, {
-          title: 'Mesh',
-          link: '/docs/Object/Mesh/demo01'
-        }]
-      }, {
-        title: '纹理(Textures)',
-        list: [{
-          title: 'Texture',
-          link: '/docs/Textures/Texture/demo01'
-        }]
-      }]
+      panelArr: panelArr
     }
   }
 }
